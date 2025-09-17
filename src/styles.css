@@ -1,3 +1,59 @@
+/* Limitar ancho de badge de favorite en respuestas recientes */
+.badge.bg-primary-subtle.text-primary {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+/* Limitar ancho de comentario en respuestas recientes */
+.recent-response-comment {
+  max-width: 95%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+body.dark .dashboard-reaction-count {
+  color: #fff !important;
+}
+.btn-outline-secondary {
+  border-color: #222; /* Borde negro */
+  color: #222;
+  border-width: 1px;
+}
+
+body.dark .btn-outline-secondary {
+  border-color: #fff;
+  color: #fff !important;
+}
+
+body.dark .btn-outline-secondary {
+  color: #fff !important;
+}
+/* Unificar tamaño y alineación de gráficos en dashboard */
+.dashboard-graph-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 370px;
+}
+.dashboard-chart {
+  max-width: 350px;
+  max-height: 350px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+/* Limitar tamaño de los gráficos en dashboard */
+.dashboard-chart {
+  max-width: 100%;
+  max-height: 250px;
+  margin: 0 auto;
+  display: block;
+}
 /* Theme variables */
 :root {
   --accent: #6f42c1;
@@ -16,38 +72,36 @@
   --badge-color: #1a1a1a;
   --label-color: #1a1a1a;
   --shadow-color: #0002;
-}
-body.dark {
-  --bg-gradient-from: #0f172a;
-  --bg-gradient-to: #1e293b;
-  --text: #ffffff; /* Blanco puro para texto principal */
-  --text-muted: #e2e8f0; /* Gris muy claro para texto secundario */
-  --heading-color: #ffffff; /* Blanco puro para encabezados */
-  --card-bg: #1e293b; /* Fondo sólido para tarjetas */
-  --card-border: #ffffff22;
-  --input-bg: #0f172a;
-  --input-border: #475569;
-  --toast-bg: #1e293b;
-  --card-hover: #ffffff0a;
-  --badge-bg: #475569;
-  --badge-color: #fff;
-  --label-color: #f8fafc; /* Color claro específico para etiquetas */
+  --reaction-bg: #f8fafc;
+  --reaction-border: #e2e8f0;
+  --stars-color: #fbbf24;
+  --quote-bg: #f8fafc;
+  --chart-bg: rgba(111, 66, 193, 0.1);
+  --chart-border: #6f42c1;
 }
 
 /* Dark theme */
 body.dark {
   --bg-gradient-from: #0f172a;
   --bg-gradient-to: #1e293b;
-  --text: #fff;
-  --text-muted: #e2e8f0; /* Más claro para mejor contraste */
-  --card-bg: #1e293b; /* Más sólido */
+  --text: #ffffff;
+  --text-muted: #e2e8f0;
+  --heading-color: #ffffff;
+  --card-bg: #1e293b;
   --card-border: #ffffff22;
   --input-bg: #0f172a;
   --input-border: #475569;
   --toast-bg: #1e293b;
+  --reaction-bg: #1e293b;
+  --reaction-border: #334155;
+  --stars-color: #fbbf24;
+  --quote-bg: #0f172a;
   --card-hover: #ffffff0a;
   --badge-bg: #475569;
   --badge-color: #fff;
+  --label-color: #f8fafc;
+  --chart-bg: rgba(111, 66, 193, 0.2);
+  --chart-border: rgba(111, 66, 193, 0.8);
 }
 
 /* Base styles */
@@ -69,16 +123,71 @@ body {
   background: var(--card-bg);
   border-color: var(--card-border);
   backdrop-filter: blur(8px);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Dashboard styles */
+.stats-dashboard {
+  .stats-dashboard {
+    animation: slideDown 0.3s ease-out;
+    margin-bottom: 48px;
+  }
+}
+
+.stats-dashboard .card {
+  overflow: hidden;
+}
+
+.stats-dashboard .card h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1;
+}
+
+.stats-dashboard .card h6 {
+  font-weight: 500;
+  margin: 0;
+}
+
+.stats-dashboard .card small {
+  font-size: 0.875rem;
+}
+
+.stats-dashboard canvas {
+  transition: opacity 0.3s;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Dark mode specific adjustments */
+
+/* Mejor contraste para nombre y comentario en modo oscuro */
+body.dark .recent-response-name,
+body.dark .recent-response-comment {
+  color: var(--text) !important;
+}
+
 body.dark .text-muted,
 body.dark small,
 body.dark .small,
 body.dark .form-text,
 body.dark .text-secondary {
-  color: #e2e8f0 !important;
+  color: #bfc8d8 !important;
 }
 
 body.dark .badge.bg-secondary {
@@ -191,6 +300,58 @@ body.dark .form-select:focus {
   background: var(--card-hover);
 }
 
+/* Dashboard Styles */
+.stats-dashboard {
+  animation: slideDown 0.3s ease-out;
+}
+
+.stats-dashboard .stat-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease;
+  cursor: pointer;
+  height: 100%;
+}
+
+.stats-dashboard .stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.stats-dashboard .chart-card {
+  background-color: var(--card-bg);
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+  height: 100%;
+}
+
+.stats-dashboard .chart-card:hover {
+  border-color: var(--accent) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Stats card icons */
+.stats-dashboard .fa-fw {
+  font-size: 1.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+/* Animation for dashboard appearance */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Toast customization */
 .toast {
   background: var(--toast-bg);
@@ -249,6 +410,59 @@ code {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* New styles for reactions and enhanced UI */
+.stars {
+  color: var(--stars-color);
+  letter-spacing: 2px;
+}
+
+.bg-light {
+  background-color: var(--quote-bg) !important;
+}
+
+.btn-light {
+  background-color: var(--reaction-bg);
+  border-color: var(--reaction-border);
+}
+
+.btn-light:hover {
+  background-color: var(--card-bg);
+  border-color: var(--card-border);
+}
+
+.badge.bg-primary-subtle {
+  background-color: var(--accent) !important;
+  color: white !important;
+  font-weight: 500;
+  padding: 0.5em 1em;
+}
+
+/* Dashboard Styles */
+.stats-dashboard .stat-card {
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.stats-dashboard .stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stats-dashboard .chart-card {
+  background-color: var(--card-bg);
+  transition: all 0.2s ease-in-out;
+}
+
+.stats-dashboard .chart-card:hover {
+  border-color: var(--accent) !important;
+}
+
+/* Icons in stats cards */
+.stats-dashboard .fa-fw {
+  font-size: 1.2rem;
+  width: 1.5rem;
+  text-align: center;
 }
 
 /* Responsive */
