@@ -1,0 +1,264 @@
+/* Theme variables */
+:root {
+  --accent: #6f42c1;
+  --accent-dark: #4b2a84;
+  --bg-gradient-from: #f8fafc;
+  --bg-gradient-to: #eef2ff;
+  --text: #1a1a1a;
+  --text-muted: #666;
+  --card-bg: #fff;
+  --card-border: #0001;
+  --input-bg: #fff;
+  --input-border: #ddd;
+  --toast-bg: #fff;
+  --card-hover: #fff5;
+  --badge-bg: #e2e8f0;
+  --badge-color: #1a1a1a;
+  --label-color: #1a1a1a;
+  --shadow-color: #0002;
+}
+body.dark {
+  --bg-gradient-from: #0f172a;
+  --bg-gradient-to: #1e293b;
+  --text: #ffffff; /* Blanco puro para texto principal */
+  --text-muted: #e2e8f0; /* Gris muy claro para texto secundario */
+  --heading-color: #ffffff; /* Blanco puro para encabezados */
+  --card-bg: #1e293b; /* Fondo sólido para tarjetas */
+  --card-border: #ffffff22;
+  --input-bg: #0f172a;
+  --input-border: #475569;
+  --toast-bg: #1e293b;
+  --card-hover: #ffffff0a;
+  --badge-bg: #475569;
+  --badge-color: #fff;
+  --label-color: #f8fafc; /* Color claro específico para etiquetas */
+}
+
+/* Dark theme */
+body.dark {
+  --bg-gradient-from: #0f172a;
+  --bg-gradient-to: #1e293b;
+  --text: #fff;
+  --text-muted: #e2e8f0; /* Más claro para mejor contraste */
+  --card-bg: #1e293b; /* Más sólido */
+  --card-border: #ffffff22;
+  --input-bg: #0f172a;
+  --input-border: #475569;
+  --toast-bg: #1e293b;
+  --card-hover: #ffffff0a;
+  --badge-bg: #475569;
+  --badge-color: #fff;
+}
+
+/* Base styles */
+body {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: linear-gradient(
+    180deg,
+    var(--bg-gradient-from),
+    var(--bg-gradient-to) 60%
+  );
+  min-height: 100vh;
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Components */
+.card {
+  border-radius: 16px;
+  background: var(--card-bg);
+  border-color: var(--card-border);
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Dark mode specific adjustments */
+body.dark .text-muted,
+body.dark small,
+body.dark .small,
+body.dark .form-text,
+body.dark .text-secondary {
+  color: #e2e8f0 !important;
+}
+
+body.dark .badge.bg-secondary {
+  background-color: #475569 !important;
+  color: #ffffff;
+}
+
+/* Fix all text colors in dark mode */
+body.dark .form-label,
+body.dark label,
+body.dark .h5,
+body.dark .h6,
+body.dark h2,
+body.dark h3,
+body.dark h4,
+body.dark h5,
+body.dark h6 {
+  color: #ffffff !important;
+}
+
+/* Fix form labels and headings in dark mode */
+body.dark .form-label,
+body.dark .card h2,
+body.dark .card h3,
+body.dark .card h4,
+body.dark .card h5,
+body.dark .card h6 {
+  color: var(--text) !important;
+}
+
+/* Ensure all headings within cards are visible */
+body.dark .card-body .h5,
+body.dark .card-body .h6 {
+  color: var(--text) !important;
+}
+
+/* Additional fixes for other potentially gray text */
+body.dark label,
+body.dark .form-select,
+body.dark .form-control {
+  color: var(--text);
+}
+
+/* Improve input contrast in dark mode */
+body.dark .form-control::placeholder,
+body.dark .form-select {
+  color: var(--text-muted);
+}
+
+body.dark .form-control:focus,
+body.dark .form-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 0.25rem rgb(111 66 193 / 25%);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px -10px #0002 !important;
+}
+
+.form-control,
+.form-select {
+  background: var(--input-bg);
+  border-color: var(--input-border);
+  color: var(--text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: var(--input-bg);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* Buttons */
+.btn {
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  border-color: var(--accent-dark);
+  transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn-outline-primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* List items */
+.list-group-item {
+  background: transparent;
+  border-color: var(--card-border);
+  transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+  background: var(--card-hover);
+}
+
+/* Toast customization */
+.toast {
+  background: var(--toast-bg);
+  border-color: var(--card-border);
+  color: var(--text);
+}
+
+/* Theme toggle */
+.theme-toggle {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 1000;
+  width: 42px;
+  height: 42px;
+  border-radius: 21px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  color: var(--text);
+  font-size: 1.2rem;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px #0002;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px #0003;
+}
+
+/* Text & Headers */
+header h1 {
+  letter-spacing: -0.5px;
+}
+
+code {
+  background: var(--accent);
+  color: #fff;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+}
+
+/* Animation utility classes */
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .theme-toggle {
+    bottom: 1rem;
+    left: 1rem;
+  }
+}
