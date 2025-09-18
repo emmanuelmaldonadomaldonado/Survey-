@@ -1,5 +1,176 @@
+// Translations object with all text in English and Spanish
+const translations = {
+    en: {
+        title: "Survey: Digital Experience 2025",
+        subtitle: "Tell us about your experience — design, speed, and usability.",
+        formTitle: "Complete the survey",
+        nameLabel: "Name",
+        namePlaceholder: "Your name or alias",
+        ageLabel: "Age",
+        agePlaceholder: "Optional",
+        satisfactionLabel: "Satisfaction",
+        satisfactionOptions: {
+            1: "1 — Very poor",
+            2: "2 — Poor",
+            3: "3 — Neutral",
+            4: "4 — Good",
+            5: "5 — Excellent"
+        },
+        favoriteLabel: "What did you like the most",
+        favoriteOptions: {
+            uiDesign: "UI Design",
+            performance: "Performance",
+            accessibility: "Accessibility",
+            content: "Content",
+            other: "Other",
+            specify: "Specify..."
+        },
+        commentsLabel: "Comments",
+        commentsPlaceholder: "Anything you'd like to share?",
+        submitButton: "Submit response",
+        recentResponses: "Recent responses",
+        noResponses: "No responses yet. Be the first one.",
+        characters: "characters",
+        deleteConfirm: "Delete this response?",
+        clearAllConfirm: "Clear all responses? This action cannot be undone.",
+        deleteSuccess: "Response deleted",
+        clearAllSuccess: "All responses were deleted",
+        submitSuccess: "Thank you for your response!",
+        fixErrors: "Please fix the errors before submitting",
+        validation: {
+            nameTooLong: "Name too long (max 50 characters)",
+            invalidAge: "Invalid age (0-120)",
+            commentsTooLong: "Comment too long (max 500 characters)"
+        },
+        stats: {
+            title: "Stats Dashboard",
+            total: "Total Responses",
+            satisfaction: "Satisfaction",
+            avgAge: "Average Age",
+            lastResponse: "Last Response",
+            years: "years",
+            last7Days: "Last 7 days",
+            responsesLabel: "Responses",
+            distributions: {
+                satisfaction: "Satisfaction Distribution",
+                favorite: "Favorite Aspects",
+                reactions: "Reactions"
+            },
+            noData: {
+                title: "No data to display",
+                message: "Complete the survey to see statistics and charts here."
+            }
+        },
+        buttons: {
+            showStats: "Show Dashboard",
+            hideStats: "Hide Dashboard",
+            export: "Export",
+            clear: "Clear",
+            delete: "Delete",
+            darkMode: "Switch to dark mode",
+            lightMode: "Switch to light mode",
+            language: "Switch to Spanish"
+        },
+        footer: {
+            beforeCode: "Demo project — stores locally in ",
+            afterCode: ". UI built with Bootstrap and React."
+        }
+    },
+    es: {
+        title: "Encuesta: Experiencia Digital 2025",
+        subtitle: "Dinos cómo fue tu experiencia — diseño, velocidad y usabilidad.",
+        formTitle: "Completa la encuesta",
+        nameLabel: "Nombre",
+        namePlaceholder: "Tu nombre o alias",
+        ageLabel: "Edad",
+        agePlaceholder: "Opcional",
+        satisfactionLabel: "Satisfacción",
+        satisfactionOptions: {
+            1: "1 — Muy mala",
+            2: "2 — Mala",
+            3: "3 — Neutral",
+            4: "4 — Buena",
+            5: "5 — Excelente"
+        },
+        favoriteLabel: "Qué te gustó más",
+        favoriteOptions: {
+            uiDesign: "UI Design",
+            performance: "Performance",
+            accessibility: "Accesibilidad",
+            content: "Contenido",
+            other: "Otra",
+            specify: "Especifica..."
+        },
+        commentsLabel: "Comentarios",
+        commentsPlaceholder: "¿Algo que quieras compartir?",
+        submitButton: "Enviar respuesta",
+        recentResponses: "Respuestas recientes",
+        noResponses: "Aún no hay respuestas. Sé el primero.",
+        characters: "caracteres",
+        deleteConfirm: "¿Borrar esta respuesta?",
+        clearAllConfirm: "¿Limpiar todas las respuestas? Esta acción no se puede deshacer.",
+        deleteSuccess: "Respuesta eliminada",
+        clearAllSuccess: "Se eliminaron todas las respuestas",
+        submitSuccess: "¡Gracias por tu respuesta!",
+        fixErrors: "Por favor corrige los errores antes de enviar",
+        validation: {
+            nameTooLong: "Nombre demasiado largo (máx. 50 caracteres)",
+            invalidAge: "Edad inválida (0-120)",
+            commentsTooLong: "Comentario demasiado largo (máx. 500 caracteres)"
+        },
+        stats: {
+            title: "Panel de Estadísticas",
+            total: "Total Respuestas",
+            satisfaction: "Satisfacción",
+            avgAge: "Edad Media",
+            lastResponse: "Última Respuesta",
+            years: "años",
+            last7Days: "Últimos 7 días",
+            responsesLabel: "Respuestas",
+            distributions: {
+                satisfaction: "Distribución de Satisfacción",
+                favorite: "Aspectos Favoritos",
+                reactions: "Reacciones"
+            },
+            noData: {
+                title: "No hay datos para mostrar",
+                message: "Completa la encuesta para ver estadísticas y gráficos aquí."
+            }
+        },
+        buttons: {
+            showStats: "Ver Dashboard",
+            hideStats: "Ocultar Dashboard",
+            export: "Exportar",
+            clear: "Limpiar",
+            delete: "Borrar",
+            darkMode: "Cambiar a modo oscuro",
+            lightMode: "Cambiar a modo claro",
+            language: "Switch to English"
+        },
+        footer: {
+            beforeCode: "Proyecto demo — guarda localmente en ",
+            afterCode: ". UI creada con Bootstrap y React."
+        }
+    }
+};
+
 // Chart.js se carga por CDN, disponible como variable global Chart
 const { useState, useEffect } = React;
+
+// Language hook
+function useLanguage() {
+    const [language, setLanguage] = useState(() => {
+        const stored = localStorage.getItem('app:language');
+        return stored || 'es';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('app:language', language);
+        document.documentElement.lang = language;
+    }, [language]);
+
+    return [language, setLanguage];
+}
 
 // Tema oscuro/claro
 function useTheme() {
@@ -69,7 +240,7 @@ function useFormValidation(name, age, notes) {
 }
 
 // Componente de gráficos
-function SurveyStats({ responses }) {
+function SurveyStats({ responses, t }) {
     const satisfactionChartRef = React.useRef(null);
     const favoriteChartRef = React.useRef(null);
     const reactionChartRef = React.useRef(null);
@@ -137,7 +308,7 @@ function SurveyStats({ responses }) {
             data: {
                 labels: ['1 ⭐', '2 ⭐', '3 ⭐', '4 ⭐', '5 ⭐'],
                 datasets: [{
-                    label: 'Respuestas',
+                    label: t.stats.responsesLabel,
                     data: satisfactionData,
                     backgroundColor: '#6f42c180',
                     borderColor: '#6f42c1',
@@ -150,7 +321,7 @@ function SurveyStats({ responses }) {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Distribución de Satisfacción'
+                        text: t.stats.distributions.satisfaction
                     }
                 },
                 scales: {
@@ -179,7 +350,7 @@ function SurveyStats({ responses }) {
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Aspectos Favoritos'
+                        text: t.stats.distributions.favorite
                     },
                     legend: {
                         position: 'right'
@@ -216,7 +387,7 @@ function SurveyStats({ responses }) {
                 scales: {
                     r: {
                         ticks: {
-                            display: false // Oculta los números en el radio
+                            display: false // hide radial ticks
                         }
                     }
                 }
@@ -232,7 +403,7 @@ function SurveyStats({ responses }) {
         return () => {
             Object.values(charts).forEach(chart => chart?.destroy());
         };
-    }, [responses]);
+    }, [responses, t]);
 
     return (
         <div className="stats-dashboard">
@@ -242,11 +413,11 @@ function SurveyStats({ responses }) {
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body">
-                            <h6 className="text-muted mb-2">Total Respuestas</h6>
+                            <h6 className="text-muted mb-2">{t.stats.total}</h6>
                             <h3 className="mb-0">{responses.length}</h3>
                             <small className="text-success">
                                 <i className="fas fa-arrow-up me-1"></i>
-                                Últimos 7 días: {dashboardStats?.last7Days ?? 0}
+                                {t.stats.last7Days}: {dashboardStats?.last7Days ?? 0}
                             </small>
                         </div>
                     </div>
@@ -254,7 +425,7 @@ function SurveyStats({ responses }) {
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body">
-                            <h6 className="text-muted mb-2">Satisfacción</h6>
+                            <h6 className="text-muted mb-2">{t.stats.satisfaction}</h6>
                             <h3 className="mb-0">{dashboardStats?.avgSatisfaction ?? '—'}/5</h3>
                             <div className="stars small">
                                 {dashboardStats ? ('★'.repeat(Math.round(dashboardStats.avgSatisfaction)) + '☆'.repeat(5 - Math.round(dashboardStats.avgSatisfaction))) : '—'}
@@ -265,16 +436,16 @@ function SurveyStats({ responses }) {
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body">
-                            <h6 className="text-muted mb-2">Edad Media</h6>
+                            <h6 className="text-muted mb-2">{t.stats.avgAge}</h6>
                             <h3 className="mb-0">{dashboardStats?.avgAge ?? '—'}</h3>
-                            <small className="text-muted">años</small>
+                            <small className="text-muted">{t.stats.years}</small>
                         </div>
                     </div>
                 </div>
                 <div className="col-md-3">
                     <div className="card border-0 shadow-sm h-100">
                         <div className="card-body">
-                            <h6 className="text-muted mb-2">Última Respuesta</h6>
+                            <h6 className="text-muted mb-2">{t.stats.lastResponse}</h6>
                             <div className="small">{dashboardStats?.latestResponse ?? '—'}</div>
                         </div>
                     </div>
@@ -303,8 +474,8 @@ function SurveyStats({ responses }) {
                             <div className="card-body d-flex flex-column align-items-center">
                                 <canvas ref={reactionChartRef} height="250" className="dashboard-chart"></canvas>
                                 <div className="mt-3" style={{ minHeight: '32px', textAlign: 'center', position: 'relative', zIndex: 2 }}>
-                                    {/* Leyenda y número de reacciones */}
-                                    <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#20c997', marginRight: '8px' }}>Reacciones</span>
+                                    {/* Legend and reaction counts */}
+                                    <span style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#20c997', marginRight: '8px' }}>{t.stats.distributions.reactions}</span>
                                     {Object.values(dashboardStats?.reactionCounts || {}).map((count, idx) => (
                                         <span key={idx} className="dashboard-reaction-count" style={{ margin: '0 8px', fontWeight: 500 }}>{count}</span>
                                     ))}
@@ -316,8 +487,8 @@ function SurveyStats({ responses }) {
             ) : (
                 <div className="text-center py-5">
                     <i className="fas fa-chart-bar fa-3x text-muted mb-3"></i>
-                    <h4 className="text-muted">No hay datos para mostrar</h4>
-                    <p className="text-muted">Completa la encuesta para ver estadísticas y gráficos aquí.</p>
+                    <h4 className="text-muted">{t.stats.noData.title}</h4>
+                    <p className="text-muted">{t.stats.noData.message}</p>
                 </div>
             )}
         </div>
@@ -326,6 +497,8 @@ function SurveyStats({ responses }) {
 
 function App() {
     const [isDark, setIsDark] = useTheme();
+    const [language, setLanguage] = useLanguage();
+    const t = translations[language];
     const [responses, setResponses] = useLocalStorage('survey:responses', []);
     const [name, setName] = useState('');
     const [age, setAge] = useState('');
@@ -341,7 +514,7 @@ function App() {
     function submit(e) {
         e.preventDefault();
         if (!isValid) {
-            showToast('Por favor corrige los errores antes de enviar', 'error');
+            showToast(t.fixErrors, 'error');
             return;
         }
         const entry = {
@@ -355,22 +528,22 @@ function App() {
             reactions: []
         };
         setResponses([entry, ...responses]);
-        showToast('¡Gracias por tu respuesta!');
+        showToast(t.submitSuccess);
         launchConfetti(); // Lanzar confeti al enviar
         // reset
-        setName(''); setAge(''); setSatisfaction('5'); setFavorite('UI Design'); setNotes('');
+        setName(''); setAge(''); setSatisfaction('5'); setFavorite(t.favoriteOptions.uiDesign); setNotes('');
     }
 
     function remove(id) {
-        if (!confirm('¿Borrar esta respuesta?')) return;
+        if (!confirm(t.deleteConfirm)) return;
         setResponses(responses.filter(r => r.id !== id));
-        showToast('Respuesta eliminada');
+        showToast(t.deleteSuccess);
     }
 
     function clearAll() {
-        if (!confirm('Limpiar todas las respuestas? Esta acción no se puede deshacer.')) return;
+        if (!confirm(t.clearAllConfirm)) return;
         setResponses([]);
-        showToast('Se eliminaron todas las respuestas');
+        showToast(t.clearAllSuccess);
     }
 
     function exportJSON() {
@@ -394,23 +567,32 @@ function App() {
 
     return (
         <div className="container py-5">
-            {/* Theme toggle */}
-            <button
-                onClick={() => setIsDark(!isDark)}
-                className="theme-toggle"
-                title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-            >
-                <i className={`fas fa-${isDark ? 'sun' : 'moon'}`}></i>
-            </button>
+            {/* Theme and Language toggles */}
+            <div className="floating-controls">
+                <button
+                    onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
+                    className="theme-toggle"
+                    title={t.buttons.language}
+                >
+                    <i className="fas fa-language"></i>
+                </button>
+                <button
+                    onClick={() => setIsDark(!isDark)}
+                    className="theme-toggle"
+                    title={t.buttons[isDark ? 'lightMode' : 'darkMode']}
+                >
+                    <i className={`fas fa-${isDark ? 'sun' : 'moon'}`}></i>
+                </button>
+            </div>
 
             <header className="d-flex align-items-center justify-content-between mb-4">
                 <div>
                     <h1 className="display-6 mb-0">
-                        Encuesta: Experiencia Digital 2025
+                        {t.title}
                         <i className="fas fa-sparkles ms-2 text-warning"></i>
                     </h1>
                     <p className="text-muted small mb-0">
-                        Dinos cómo fue tu experiencia — diseño, velocidad y usabilidad.
+                        {t.subtitle}
                     </p>
                 </div>
                 <div className="d-flex gap-2">
@@ -419,25 +601,25 @@ function App() {
                             <button
                                 className="btn btn-outline-primary"
                                 onClick={() => setShowStats(!showStats)}
-                                title={showStats ? "Ocultar estadísticas" : "Ver estadísticas"}
+                                title={showStats ? t.buttons.hideStats : t.buttons.showStats}
                             >
                                 <i className="fas fa-chart-bar me-1"></i>
-                                {showStats ? 'Ocultar' : 'Ver'} Dashboard
+                                {showStats ? t.buttons.hideStats : t.buttons.showStats}
                             </button>
                             <button
                                 className="btn btn-outline-secondary"
                                 onClick={exportJSON}
-                                title="Exportar respuestas"
+                                title={t.buttons.export}
                             >
                                 <i className="fas fa-download me-1"></i>
-                                Exportar
+                                {t.buttons.export}
                             </button>
                             <button
                                 className="btn btn-danger"
                                 onClick={clearAll}
                             >
                                 <i className="fas fa-trash-alt me-1"></i>
-                                Limpiar
+                                {t.buttons.clear}
                             </button>
                         </div>
                     )}
@@ -446,34 +628,34 @@ function App() {
 
             {/* Mostrar solo el dashboard o el formulario según showStats */}
             {showStats && responses.length > 0 ? (
-                <SurveyStats responses={responses} />
+                <SurveyStats responses={responses} t={t} />
             ) : (
                 <>
                     <main className="row gy-4">
                         <section className="col-lg-6">
                             <div className="card shadow-lg border-0">
                                 <div className="card-body p-4">
-                                    <h2 className="h5">Completa la encuesta</h2>
+                                    <h2 className="h5">{t.formTitle}</h2>
                                     <form onSubmit={submit} className="mt-3">
                                         <div className="mb-3">
                                             <label className="form-label">
                                                 <i className="fas fa-user me-1"></i>
-                                                Nombre
+                                                {t.nameLabel}
                                             </label>
                                             <input
                                                 className={`form-control form-control-lg ${errors.name ? 'is-invalid' : ''}`}
                                                 value={name}
                                                 onChange={e => setName(e.target.value)}
-                                                placeholder="Tu nombre o alias"
-                                                aria-label="Nombre"
+                                                placeholder={t.namePlaceholder}
+                                                aria-label={t.nameLabel}
                                             />
-                                            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+                                            {errors.name && <div className="invalid-feedback">{t.validation.nameTooLong}</div>}
                                         </div>
                                         <div className="mb-3 d-flex gap-2">
                                             <div className="flex-fill">
                                                 <label className="form-label">
                                                     <i className="fas fa-calendar me-1"></i>
-                                                    Edad
+                                                    {t.ageLabel}
                                                 </label>
                                                 <input
                                                     className={`form-control ${errors.age ? 'is-invalid' : ''}`}
@@ -481,27 +663,32 @@ function App() {
                                                     onChange={e => setAge(e.target.value)}
                                                     type="number"
                                                     min="0"
-                                                    placeholder="Opcional"
-                                                    aria-label="Edad"
+                                                    placeholder={t.agePlaceholder}
+                                                    aria-label={t.ageLabel}
                                                 />
-                                                {errors.age && <div className="invalid-feedback">{errors.age}</div>}
+                                                {errors.age && <div className="invalid-feedback">{t.validation.invalidAge}</div>}
                                             </div>
                                             <div style={{ width: 120 }}>
-                                                <label className="form-label">Satisfacción</label>
+                                                <label className="form-label">{t.satisfactionLabel}</label>
                                                 <select className="form-select" value={satisfaction} onChange={e => setSatisfaction(e.target.value)}>
-                                                    <option value="1">1 — Muy mala</option>
-                                                    <option value="2">2 — Mala</option>
-                                                    <option value="3">3 — Neutral</option>
-                                                    <option value="4">4 — Buena</option>
-                                                    <option value="5">5 — Excelente</option>
+                                                    <option value="1">{t.satisfactionOptions[1]}</option>
+                                                    <option value="2">{t.satisfactionOptions[2]}</option>
+                                                    <option value="3">{t.satisfactionOptions[3]}</option>
+                                                    <option value="4">{t.satisfactionOptions[4]}</option>
+                                                    <option value="5">{t.satisfactionOptions[5]}</option>
                                                 </select>
                                             </div>
                                         </div>
 
                                         <div className="mb-3">
-                                            <label className="form-label">Qué te gustó más</label>
+                                            <label className="form-label">{t.favoriteLabel}</label>
                                             <div className="d-flex gap-2 flex-wrap">
-                                                {['UI Design', 'Performance', 'Accesibilidad', 'Contenido'].map(opt => (
+                                                {[
+                                                    t.favoriteOptions.uiDesign,
+                                                    t.favoriteOptions.performance,
+                                                    t.favoriteOptions.accessibility,
+                                                    t.favoriteOptions.content
+                                                ].map(opt => (
                                                     <button type="button" key={opt} className={`btn ${favorite === opt ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFavorite(opt)}>{opt}</button>
                                                 ))}
                                                 <div style={{ display: 'inline-block', position: 'relative', verticalAlign: 'middle' }}>
@@ -510,7 +697,7 @@ function App() {
                                                         className={`btn ${favorite.startsWith('Otra:') ? 'btn-primary' : 'btn-outline-primary'}`}
                                                         onClick={() => setFavorite('Otra:')}
                                                     >
-                                                        Otra
+                                                        {t.favoriteOptions.other}
                                                     </button>
                                                     {favorite.startsWith('Otra:') && (
                                                         <input
@@ -519,7 +706,7 @@ function App() {
                                                             style={{ display: 'inline-block', width: 140, verticalAlign: 'middle' }}
                                                             value={favorite.replace('Otra:', '')}
                                                             onChange={e => setFavorite('Otra:' + e.target.value)}
-                                                            placeholder="Especifica..."
+                                                            placeholder={t.favoriteOptions.specify}
                                                         />
                                                     )}
                                                 </div>
@@ -529,19 +716,19 @@ function App() {
                                         <div className="mb-3">
                                             <label className="form-label">
                                                 <i className="fas fa-comment me-1"></i>
-                                                Comentarios
+                                                {t.commentsLabel}
                                             </label>
                                             <textarea
                                                 className={`form-control ${errors.notes ? 'is-invalid' : ''}`}
                                                 value={notes}
                                                 onChange={e => setNotes(e.target.value)}
                                                 rows="4"
-                                                placeholder="¿Algo que quieras compartir?"
-                                                aria-label="Comentarios"
+                                                placeholder={t.commentsPlaceholder}
+                                                aria-label={t.commentsLabel}
                                             ></textarea>
-                                            {errors.notes && <div className="invalid-feedback">{errors.notes}</div>}
+                                            {errors.notes && <div className="invalid-feedback">{t.validation.commentsTooLong}</div>}
                                             <small className="form-text text-muted mt-1">
-                                                {notes.length}/500 caracteres
+                                                {notes.length}/500 {t.characters}
                                             </small>
                                         </div>
 
@@ -552,7 +739,7 @@ function App() {
                                                 disabled={!isValid}
                                             >
                                                 <i className="fas fa-paper-plane me-1"></i>
-                                                Enviar respuesta
+                                                {t.submitButton}
                                             </button>
                                         </div>
                                     </form>
@@ -563,9 +750,9 @@ function App() {
                         <aside className="col-lg-6">
                             <div className="card border-0 shadow-sm h-100">
                                 <div className="card-body p-3">
-                                    <h3 className="h6">Respuestas recientes <span className="badge bg-secondary ms-2">{responses.length}</span></h3>
+                                    <h3 className="h6">{t.recentResponses} <span className="badge bg-secondary ms-2">{responses.length}</span></h3>
                                     <div className="list-group list-group-flush mt-3">
-                                        {responses.length === 0 && <div className="text-muted small p-3">Aún no hay respuestas. Sé el primero.</div>}
+                                        {responses.length === 0 && <div className="text-muted small p-3">{t.noResponses}</div>}
                                         {responses.map(r => (
                                             <div key={r.id} className="list-group-item d-flex gap-3 align-items-start fade-in">
                                                 <div className="flex-grow-1">
@@ -646,7 +833,7 @@ function App() {
                         </aside>
                     </main>
 
-                    <footer className="mt-5 text-center text-muted small">Proyecto demo — guarda localmente en <code>localStorage</code>. UI creada con Bootstrap y React.</footer>
+                    <footer className="mt-5 text-center text-muted small">{t.footer.beforeCode}<code>localStorage</code>{t.footer.afterCode}</footer>
                 </>
             )}
         </div>

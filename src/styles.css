@@ -359,12 +359,23 @@ body.dark .form-select:focus {
   color: var(--text);
 }
 
-/* Theme toggle */
-.theme-toggle {
+/* Theme and Language toggle */
+/* Fixed wrapper to keep controls above all content */
+.floating-controls {
   position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  z-index: 1000;
+  bottom: 1rem;
+  left: 1rem;
+  z-index: 2147483647; /* max stack to avoid being hidden */
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  gap: 0.5rem;
+  pointer-events: none; /* wrapper doesn't block page */
+}
+.floating-controls .theme-toggle {
+  pointer-events: auto;
+}
+
+.theme-toggle {
   width: 42px;
   height: 42px;
   border-radius: 21px;
@@ -471,8 +482,8 @@ code {
     flex-direction: column;
     gap: 0.75rem;
   }
-  .theme-toggle {
-    bottom: 1rem;
-    left: 1rem;
+  .floating-controls {
+    bottom: 0.75rem;
+    left: 0.75rem;
   }
 }
